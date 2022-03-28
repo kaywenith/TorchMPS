@@ -480,6 +480,7 @@ class MPS(nn.Module):
         
         # When MPS itself is used as a trainable embedding of another MPS
         if len(input_data.shape) == 1:
+            as_trainable_embedding = True
             input_data = input_data.view((1, -1))
 
         # Embed our input data before feeding it into our linear region
@@ -500,7 +501,7 @@ class MPS(nn.Module):
                     self.sv_list[i] = new_svs[i]
 
         # When MPS itself is used as a trainable embedding of another MPS
-        if len(input_data.shape) == 1:
+        if as_trainable_embedding:
             output = output.view(-1)
         return output
 
