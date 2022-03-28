@@ -477,6 +477,10 @@ class MPS(nn.Module):
             for site_num in self.path:
                 path_inputs.append(input_data[:, site_num])
             input_data = torch.stack(path_inputs, dim=1)
+        
+        # When MPS itself is used as a trainable embedding of another MPS
+        if len(input_data.shape) == 1:
+            input_data = input_data.view((1, -1))
 
         # Embed our input data before feeding it into our linear region
         input_data = self.embed_input(input_data)
