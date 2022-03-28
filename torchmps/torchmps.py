@@ -479,6 +479,7 @@ class MPS(nn.Module):
             input_data = torch.stack(path_inputs, dim=1)
         
         # When MPS itself is used as a trainable embedding of another MPS
+        as_trainable_embedding = False
         if len(input_data.shape) == 1:
             as_trainable_embedding = True
             input_data = input_data.view((1, -1))
