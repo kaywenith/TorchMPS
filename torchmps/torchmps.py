@@ -1043,7 +1043,6 @@ class InputRegion(nn.Module):
         """
         # Check that input_data has the correct shape
         tensor = self.tensor
-        print(input_data)
         assert len(input_data.shape) == 3
         assert input_data.size(1) == len(self)
         assert input_data.size(2) == tensor.size(3)
