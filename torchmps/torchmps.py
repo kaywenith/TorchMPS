@@ -499,6 +499,9 @@ class MPS(nn.Module):
                     self.bond_list[i] = bond_dim
                     self.sv_list[i] = new_svs[i]
 
+        # When MPS itself is used as a trainable embedding of another MPS
+        if len(input_data.shape) == 1:
+            output = output.view(-1)
         return output
 
     def embed_input(self, input_data):
