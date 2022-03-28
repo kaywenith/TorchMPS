@@ -205,7 +205,7 @@ def init_tensor(shape, bond_str, init_method):
     assert len(shape) == len(bond_str)
     assert len(set(bond_str)) == len(bond_str)
 
-    if init_method not in ["random_eye", "min_random_eye", "random_zero"]:
+    if init_method not in ["random_eye", "min_random_eye", "random_zero", "random_eye2"]:
         raise ValueError(f"Unknown initialization method: {init_method}")
 
     if init_method in ["random_eye", "min_random_eye"]:
@@ -248,6 +248,15 @@ def init_tensor(shape, bond_str, init_method):
 
     elif init_method == "random_zero":
         tensor = std * torch.randn(shape)
+        
+    elif init_method == "random_eye2":
+        bond_chars = ["l", "r"]
+        bond_dims = [shape[bond_str.index(c)] for c in bond_chars]
+        feature_dim = shape[bond_str.index('i')]
+        # assumimg bond_str to be 'slri'. To update later if this init_method is useful
+        tensor = torch.stack([torch.eye(bond_dims[0], bond_dims[1])] + [torch.zeros(bond_dims[0], bond_dims[1]) for _ in range(feature_dim-1)])
+        tensor = tensor.swapaxes(0, 2).view((1, bond_dims[0], bond_dims[1], feature_dim)).expand(shape)
+        tensor += std * torch.randn(shape)
 
     return tensor
 
