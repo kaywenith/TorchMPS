@@ -254,9 +254,9 @@ def init_tensor(shape, bond_str, init_method):
         bond_dims = [shape[bond_str.index(c)] for c in bond_chars]
         feature_dim = shape[bond_str.index('i')]
         # assumimg bond_str to be 'slri'. To update later if this init_method is useful
-        tensor = torch.stack([torch.eye(bond_dims[0], bond_dims[1])] + [torch.zeros(bond_dims[0], bond_dims[1]) for _ in range(feature_dim-1)])
-        tensor = tensor.swapaxes(0, 2).view((1, bond_dims[0], bond_dims[1], feature_dim)).expand(shape)
-        tensor += std * torch.randn(shape)
+        tmp_tensor = torch.stack([torch.eye(bond_dims[0], bond_dims[1])] + [torch.zeros(bond_dims[0], bond_dims[1]) for _ in range(feature_dim-1)])
+        tmp_tensor = tmp_tensor.swapaxes(0, 2).view((1, bond_dims[0], bond_dims[1], feature_dim)).expand(shape)
+        tensor = tmp_tensor + std * torch.randn(shape)
 
     return tensor
 
