@@ -367,11 +367,15 @@ class MPS(nn.Module):
 
         # Our MPS is made of two InputRegions separated by an OutputSite.
         module_list = []
+        if adaptive_mode or (not use_bias):
+            input_region_init_method = "random_eye2"
+        else:
+            input_region_init_method = "random_zero"
         init_args = {
             "bond_str": "slri",
             "shape": [label_site, bond_dim, bond_dim, feature_dim],
             "init_method": (
-                "min_random_eye" if adaptive_mode else "random_zero",
+                input_region_init_method,
                 init_std,
                 output_dim,
             ),
